@@ -2,6 +2,7 @@ package com.cjc.app.controller;
 
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -28,14 +29,15 @@ public class ManagerController {
 		this.managerserv = managerserv;
 	}
 
-	@PostMapping(value = "/addmanager" , consumes = {"application/json","application/xml"} , produces = {"application/json" , "application/xml"})
+	@PostMapping(value = "/addmanager",consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
+                                       produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
 	public Manager addManager(@RequestBody Manager manager)
 	{
 		 Manager savedmanager = managerserv.addManager(manager);		 
 		 return savedmanager;
 	}
 	
-	@GetMapping(value = "/getmanager/{id}" , consumes = {"application/json" , "application/xml"} , produces = {"application/json" , "application/xml"})
+	@GetMapping(value = "/getmanager/{id}",produces = {MediaType.APPLICATION_JSON_VALUE,MediaType.APPLICATION_XML_VALUE})
 	public Manager getManager(@PathVariable("id") int id)
 	{
 		Manager dbmanager = managerserv.getManagerById(id);
@@ -43,7 +45,7 @@ public class ManagerController {
 		return dbmanager;
 	}
 	
-	@GetMapping(value = "/getmanagers") //defualt data json
+	@GetMapping(value = "/getmanagers")
 	public List<Manager> getManagers()
 	{
 		List<Manager> managers = managerserv.getManagers();
@@ -51,7 +53,7 @@ public class ManagerController {
 		return managers;
 	}
 	
-	@GetMapping(value = "/getmanagers-xml" , produces ={"application/xml"} , consumes ={"application/xml"}) //only xml
+	@GetMapping(value = "/getmanagers-xml",produces ={MediaType.APPLICATION_XML_VALUE})
 	public Managers getManagersXml()
 	{
 		List<Manager> managersxml = managerserv.getManagersxml();
@@ -87,7 +89,7 @@ public class ManagerController {
 	}
 	
 	//Pagination :
-	@GetMapping(value = "/getmanagers/page") // another way -> /getmanagers/pnumber/{pageNumber}/psize{pageSize}
+	@GetMapping(value = "/getmanagers/page")
 	public List<Manager> getManagersByPagination(@RequestParam (defaultValue = "0") int pageNumber,
 			                                     @RequestParam (defaultValue = "10") int pageSize)
 	{
