@@ -18,7 +18,7 @@ import com.cjc.app.model.Managers;
 import com.cjc.app.service.ManagerService;
 
 @RestController
-@RequestMapping(value = "/api")
+@RequestMapping(value = "/api/v2")
 public class ManagerController {
      
 	
@@ -29,7 +29,7 @@ public class ManagerController {
 		this.managerserv = managerserv;
 	}
 
-	@PostMapping(value = "/addmanager",consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
+	@PostMapping(value = "/managers",consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
                                        produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
 	public Manager addManager(@RequestBody Manager manager)
 	{
@@ -37,7 +37,7 @@ public class ManagerController {
 		 return savedmanager;
 	}
 	
-	@GetMapping(value = "/getmanager/{id}",produces = {MediaType.APPLICATION_JSON_VALUE,MediaType.APPLICATION_XML_VALUE})
+	@GetMapping(value = "/managers/{id}",produces = {MediaType.APPLICATION_JSON_VALUE,MediaType.APPLICATION_XML_VALUE})
 	public Manager getManager(@PathVariable("id") int id)
 	{
 		Manager dbmanager = managerserv.getManagerById(id);
@@ -45,7 +45,7 @@ public class ManagerController {
 		return dbmanager;
 	}
 	
-	@GetMapping(value = "/getmanagers")
+	@GetMapping(value = "/managers")
 	public List<Manager> getManagers()
 	{
 		List<Manager> managers = managerserv.getManagers();
@@ -53,7 +53,7 @@ public class ManagerController {
 		return managers;
 	}
 	
-	@GetMapping(value = "/getmanagers-xml",produces ={MediaType.APPLICATION_XML_VALUE})
+	@GetMapping(value = "/managers-xml",produces ={MediaType.APPLICATION_XML_VALUE})
 	public Managers getManagersXml()
 	{
 		List<Manager> managersxml = managerserv.getManagersxml();
@@ -64,7 +64,7 @@ public class ManagerController {
 				
 		return managers;
 	}
-	@DeleteMapping(value = "/deletemanager/{id}")
+	@DeleteMapping(value = "/managers/{id}")
 	public String deleteManager(@PathVariable("id") int id)
 	{
 		String msg = managerserv.deleteManager(id);
@@ -72,7 +72,7 @@ public class ManagerController {
 		return msg;
 	}
 	
-	@PutMapping(value = "/updatemanager/{id}", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
+	@PutMapping(value = "/managers/{id}", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
                                                produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
 	public Manager updateManager(@PathVariable("id") int id , @RequestBody Manager manager)
 	{
@@ -81,7 +81,7 @@ public class ManagerController {
 		 return updatedManager;
 	}
 	
-	@PatchMapping(value = "/editmanager/{id}", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
+	@PatchMapping(value = "/managers/{id}", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
                                                produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
 	public Manager editManager(@PathVariable("id") int id , @RequestBody Manager manager)
 	{
@@ -91,7 +91,7 @@ public class ManagerController {
 	}
 	
 	//Pagination :
-	@GetMapping(value = "/getmanagers/page", produces = {MediaType.APPLICATION_JSON_VALUE,MediaType.APPLICATION_XML_VALUE})
+	@GetMapping(value = "/managers/page", produces = {MediaType.APPLICATION_JSON_VALUE,MediaType.APPLICATION_XML_VALUE})
 	public List<Manager> getManagersByPagination(@RequestParam (defaultValue = "0") int pageNumber,
 			                                     @RequestParam (defaultValue = "10") int pageSize)
 	{
@@ -101,21 +101,21 @@ public class ManagerController {
 	}
 	
 	//Sorting : By Salary -> Ascending & Descending Order.
-	@GetMapping(value = "/getmanagers/sortBySalary", produces = {MediaType.APPLICATION_JSON_VALUE,MediaType.APPLICATION_XML_VALUE})
+	@GetMapping(value = "/managers/sortBySalary", produces = {MediaType.APPLICATION_JSON_VALUE,MediaType.APPLICATION_XML_VALUE})
 	public List<Manager> getManagerBySorting(@RequestParam(defaultValue = "asc") String direction)
 	{
 		return managerserv.getManagersSortedBySalary(direction);
 	}
 	
 	//Searching : By Name
-	@GetMapping(value = "/getmanager/searchByName/{name}", produces = {MediaType.APPLICATION_JSON_VALUE,MediaType.APPLICATION_XML_VALUE})
+	@GetMapping(value = "/managers/searchByName/{name}", produces = {MediaType.APPLICATION_JSON_VALUE,MediaType.APPLICATION_XML_VALUE})
 	public List<Manager> getManagerByName(@PathVariable("name") String firstname)
 	{
 		return managerserv.getManagerByName(firstname);
 	}
 	
 	//Filtering : Data By Type And Salary Range(minSalary, maxSalary)
-	@GetMapping(value = "/getmanagers/filter", produces = {MediaType.APPLICATION_JSON_VALUE,MediaType.APPLICATION_XML_VALUE})
+	@GetMapping(value = "/managers/filter", produces = {MediaType.APPLICATION_JSON_VALUE,MediaType.APPLICATION_XML_VALUE})
 	public List<Manager> getManagersByFiltering(@RequestParam(required = false) String type,
 			                                    @RequestParam(required = false) Double minSalary,
 			                                    @RequestParam(required = false) Double maxSalary)
