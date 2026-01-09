@@ -2,7 +2,9 @@ package com.cjc.app.controller;
 
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -31,26 +33,39 @@ public class ManagerController {
 
 	@PostMapping(value = "/managers",consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
                                        produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
-	public Manager addManager(@RequestBody Manager manager)
+	public ResponseEntity<Manager> addManager(@RequestBody Manager manager)
 	{
 		 Manager savedmanager = managerserv.addManager(manager);		 
-		 return savedmanager;
+		 
+		 if(savedmanager != null)
+		 {
+			 return new ResponseEntity<Manager>(savedmanager, HttpStatus.CREATED);
+		 }
+		     return new ResponseEntity<Manager>(HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 	
 	@GetMapping(value = "/managers/{id}",produces = {MediaType.APPLICATION_JSON_VALUE,MediaType.APPLICATION_XML_VALUE})
-	public Manager getManager(@PathVariable("id") int id)
+	public ResponseEntity<Manager> getManagerById(@PathVariable("id") int id)
 	{
 		Manager dbmanager = managerserv.getManagerById(id);
 		
-		return dbmanager;
+		if(dbmanager != null)
+		{
+			return new ResponseEntity<Manager>(dbmanager, HttpStatus.FOUND);
+		}
+		    return new ResponseEntity<Manager>(HttpStatus.NOT_FOUND);
 	}
 	
 	@GetMapping(value = "/managers")
-	public List<Manager> getManagers()
+	public ResponseEntity<List<Manager>> getManagers()
 	{
 		List<Manager> managers = managerserv.getManagers();
 		
-		return managers;
+		if(!managers.isEmpty())
+		{
+			return new ResponseEntity<List<Manager>>(managers, HttpStatus.OK);
+		}
+		    return new ResponseEntity<List<Manager>>(HttpStatus.NOT_FOUND);
 	}
 	
 	@GetMapping(value = "/managers-xml",produces ={MediaType.APPLICATION_XML_VALUE})
@@ -64,6 +79,7 @@ public class ManagerController {
 				
 		return managers;
 	}
+	
 	@DeleteMapping(value = "/managers/{id}")
 	public String deleteManager(@PathVariable("id") int id)
 	{
